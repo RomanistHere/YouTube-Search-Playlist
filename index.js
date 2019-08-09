@@ -68,7 +68,7 @@ function ininInput() {
     $searchWR.addEventListener('submit', e => {
         e.preventDefault()
         const inputVal = $searchWR.querySelector('.custom_search__input').value
-        const $privateTag = document.querySelector('.badge.badge-style-type-simple.style-scope.ytd-badge-supported-renderer')
+        const $privateTag = document.querySelector('.ytd-playlist-sidebar-primary-info-renderer .badge.badge-style-type-simple.style-scope.ytd-badge-supported-renderer')
         if ($privateTag) {
             displaySupportMessage($privateTag)
         } else if (inputVal) {
