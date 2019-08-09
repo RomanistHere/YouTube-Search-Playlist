@@ -1,13 +1,12 @@
 {
 	"name": "Youtube playlist search",
   "short_name": "Youtube playlist search",
-	"version": "1.0.0",
-	"description": "Adds not implemented by Google function. Searching inside playlist.",
+	"version": "1.0.1",
+	"description": "Adds not implemented by Google functional. Searching inside playlist.",
 	"permissions": [
 		"activeTab",
     "https://www.youtube.com/*"
   ],
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'", 
   "background": {
     "scripts": ["config.js", "background.js"],
     "persistent": false
