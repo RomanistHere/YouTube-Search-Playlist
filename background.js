@@ -57,12 +57,14 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
 					chrome.tabs.insertCSS(
 			        	tabId,
 			          	{file: 'index.css'}
-			        )
+			        )			        
 			    }
 			}
 		}
 	}	
 })
+// todo: redo this gloabal variabling
+let authToken = ''
 
 chrome.runtime.onMessage.addListener(
   	function(request, sender, sendResponse) {
@@ -74,12 +76,20 @@ chrome.runtime.onMessage.addListener(
 		        .catch(sendResponse)
 			return true
 	    }
+	    if (request.auth === true) {
+	    	chrome.identity.getAuthToken({ 'interactive': true }, token => {
+			  	authToken = token
+			  	sendResponse('<3')
+			})
+			return true
+	    }
 })
 
 const getQuery = (data) => {
 	const url = 'https://www.googleapis.com/youtube/v3/playlistItems'
 	const params = {
         part: 'snippet',
+        access_token: authToken,
         playlistId: data.listId,
         key: config.YT_API_KEY,
         maxResults: 50,

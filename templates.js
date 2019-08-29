@@ -26,6 +26,14 @@ var templateSearchErr = `<div class="custom_wait">
                             <p class="custom_wait__message">Oops! Something went wrong.</p>
                         </div>`
 
+var templateAuthErr = `<div class="custom_wait">
+                            <p class="custom_wait__message">You need to <a href="#" class="custom_wait__auth">authorize</a> first.</p>
+                        </div>`
+
+var templateAuthComp = `<div class="custom_wait">
+                            <p class="custom_wait__message">Authorizing you in :)</p>
+                        </div>`
+
 var templateNoRes = `<div class="custom_wait">
                         <p class="custom_wait__message">Nothing :(</p>
                     </div>`

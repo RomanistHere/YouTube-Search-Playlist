@@ -58,11 +58,6 @@ function app() {
         e.preventDefault()
         // get value of our input
         const inputVal = $searchWR.querySelector('.custom_search__input').value
-        // const $privateTag = querySelector('.ytd-playlist-sidebar-primary-info-renderer .badge.badge-style-type-simple.style-scope.ytd-badge-supported-renderer')
-        // todo: change private recognition
-        // if ($privateTag) {
-        //     displaySupportMessage($privateTag)
-        // } else 
         if (inputVal) {
             // reset prev changes if were
             setState({
@@ -91,7 +86,7 @@ function app() {
         setState({ isStopped: true })
     })
     // handle input event 
-    querySelector('.custom_search__input').addEventListener('input', evt => removeClass($warningMess, 'custom_search__warning-visible'))
+    querySelector('.custom_search__input').addEventListener('input', e => removeClass($warningMess, 'custom_search__warning-visible'))
     // fill template with data
     const fillItem = item => {
         const ID = item.snippet.resourceId.videoId       
@@ -108,9 +103,17 @@ function app() {
         }
     }
 
-    const displaySearchErr = err => {
-        replaceHtml($resultsWR, templateSearchErr)
+    const displaySearchErr = (err, searchedWord) => {
+        err.error.message.includes('authorized') ? replaceHtml($resultsWR, templateAuthErr) : replaceHtml($resultsWR, templateSearchErr)
         resetApp()
+        querySelector('.custom_wait__auth').addEventListener('click', e => {
+            e.preventDefault()
+            replaceHtml($resultsWR, templateAuthComp)
+            chrome.runtime.sendMessage({
+                auth: true,
+            }, response => 
+                sendRequest(searchedWord))
+        })
     }
 
     const sendRequest = (searchedWord, pageToken) => {
@@ -131,7 +134,7 @@ function app() {
         const word = searchedWord.toLowerCase()
 
         if (!items) {
-            displaySearchErr()
+            displaySearchErr(results, searchedWord)
             return
         }
         // todo: rework with composes
@@ -195,14 +198,5 @@ function app() {
             // continue search
             sendRequest(searchedWord, nextPageToken)
         }))
-    }
-
-    const displaySupportMessage = ($privateTag) => {
-        // visual changes
-        addClass($supportMess, 'custom_search__warning-visible')
-        addClass($privateTag, 'badge-animated')
-        setTimeout(() => {
-            if ($privateTag) removeClass($privateTag, 'badge-animated')
-        }, 1500)
     }
 } 
