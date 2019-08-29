@@ -44,6 +44,14 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
 			        )
 					chrome.tabs.executeScript(
 			        	tabId,
+			          	{file: 'templates.js'}
+			        )
+					chrome.tabs.executeScript(
+			        	tabId,
+			          	{file: 'functions.js'}
+			        )
+					chrome.tabs.executeScript(
+			        	tabId,
 			          	{file: 'index.js'}
 			        )
 					chrome.tabs.insertCSS(

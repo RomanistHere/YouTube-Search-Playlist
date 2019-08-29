@@ -1,7 +1,7 @@
 {
 	"name": "YouTube PLAS - PLAylist Search",
   "short_name": "YouTube PLAS",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Plus not implemented by Google functional. Searching within playlist.",
 	"permissions": [
 		"activeTab",
