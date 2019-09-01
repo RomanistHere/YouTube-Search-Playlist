@@ -30,6 +30,10 @@ var templateAuthErr = `<div class="custom_wait">
                             <p class="custom_wait__message">You need to <a href="#" class="custom_wait__auth">authorize</a> first.</p>
                         </div>`
 
+var templateNotFoundErr =  `<div class="custom_wait">
+                                <p class="custom_wait__message">Youtube does not see your playlist. Try to make it public and then private again.</p>
+                            </div>`
+
 var templateAuthComp = `<div class="custom_wait">
                             <p class="custom_wait__message">Authorizing you in :)</p>
                         </div>`

@@ -1,7 +1,4 @@
 'use strict';
-// refresh page
-if (!querySelector('.custom_search')) app()
-
 // we're tracking progress bar to know when all content we need is downloaded and then start our app
 var $progressBar = querySelector('yt-page-navigation-progress')
 var observer = new MutationObserver(mutations => {
@@ -18,6 +15,25 @@ if ($progressBar) {
       attributes: true, 
     })
 }
+//////////////////////////////////////
+// YouTube for some reason not displaying progress bar every time, so there is trick, that works for this case
+// YouTube also can remove inserted input so we recheck if all good, then remove timeinterval 
+var shouldIntervalClear = false
+if (!initInterval && !querySelector('.custom_search')) var initInterval = setInterval(() => initApp(initInterval), 1000)
+
+function initApp(timerID) {
+    if (querySelector('.custom_search') && shouldIntervalClear) {
+        clearInterval(initInterval)
+        app()
+    }
+    if (querySelector('.custom_search')) {
+        shouldIntervalClear = true
+    }
+    if (!querySelector('.custom_search')) {
+        app()
+    }
+}
+/////////////////////////////////////
 
 // clear old changes on changes
 if (querySelector('.custom_search__input')) querySelector('.custom_search__input').value = ''
@@ -25,6 +41,7 @@ if (querySelectorAll('.custom_search__stats')) querySelectorAll('.custom_search_
 if (querySelector('.custom_search__support')) removeClass(querySelector('.custom_search__support'), 'custom_search__warning-visible')
 
 function app() {
+    if (querySelector('.custom_search')) return
     // initial state
     let state = {
         // const
@@ -104,16 +121,24 @@ function app() {
     }
 
     const displaySearchErr = (err, searchedWord) => {
-        err.error.message.includes('authorized') ? replaceHtml($resultsWR, templateAuthErr) : replaceHtml($resultsWR, templateSearchErr)
+        replaceHtml($resultsWR, templateSearchErr)
+        err.error.message.includes('authorized') ? (replaceHtml($resultsWR, templateAuthErr), auth()) : 
+            err.error.code == 404 ? replaceHtml($resultsWR, templateAuthErr) : replaceHtml($resultsWR, templateSearchErr)
         resetApp()
-        querySelector('.custom_wait__auth').addEventListener('click', e => {
-            e.preventDefault()
-            replaceHtml($resultsWR, templateAuthComp)
-            chrome.runtime.sendMessage({
-                auth: true,
-            }, response => 
-                sendRequest(searchedWord))
-        })
+        if (querySelector('.custom_wait__auth')) {
+            querySelector('.custom_wait__auth').addEventListener('click', e => {
+                e.preventDefault()
+                replaceHtml($resultsWR, templateAuthComp)
+                auth()
+            })
+        }
+    }
+
+    const auth = () => {
+        chrome.runtime.sendMessage({
+            auth: true,
+        }, response => 
+            sendRequest(searchedWord))
     }
 
     const sendRequest = (searchedWord, pageToken) => {

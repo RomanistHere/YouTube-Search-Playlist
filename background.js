@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener(
 	    }
 	    if (request.auth === true) {
 	    	chrome.identity.getAuthToken({ 'interactive': true }, token => {
-			  	authToken = token
+			  	authToken = token ? token : ''
 			  	sendResponse('<3')
 			})
 			return true
