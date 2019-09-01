@@ -122,19 +122,20 @@ function app() {
 
     const displaySearchErr = (err, searchedWord) => {
         replaceHtml($resultsWR, templateSearchErr)
-        err.error.message.includes('authorized') ? (replaceHtml($resultsWR, templateAuthErr), auth()) : 
+        // handle diff types of errors
+        err.error.message.includes('authorized') ? (replaceHtml($resultsWR, templateAuthErr), auth(searchedWord)) : 
             err.error.code == 404 ? replaceHtml($resultsWR, templateAuthErr) : replaceHtml($resultsWR, templateSearchErr)
         resetApp()
         if (querySelector('.custom_wait__auth')) {
             querySelector('.custom_wait__auth').addEventListener('click', e => {
                 e.preventDefault()
                 replaceHtml($resultsWR, templateAuthComp)
-                auth()
+                auth(searchedWord)
             })
         }
     }
 
-    const auth = () => {
+    const auth = (searchedWord) => {
         chrome.runtime.sendMessage({
             auth: true,
         }, response => 
