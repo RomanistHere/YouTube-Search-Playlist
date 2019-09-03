@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 		// chrome.storage.sync.set({"tutorial": true})
 
 		// open website
-		// chrome.tabs.create({url: "https://romanisthere.github.io/PopUpOFF-Website/"})
+		chrome.tabs.create({url: "https://romanisthere.github.io/YouTube-PLAS-Website/"})
 
     } else if(details.reason == "update"){
 
